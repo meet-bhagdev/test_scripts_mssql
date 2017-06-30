@@ -1,3 +1,27 @@
+
+-- Below are a few basic steps to enable DBMail, create account, create profile, add operator to SQLAgent and add notifications to a job. 
+
+-- Note that you need to add the default profile to mssql.config: 
+
+    mssql-conf set sqlagent.databasemailprofile default 
+    
+-- or via an environment variable: 
+
+    MSSQL_AGENT_EMAIL_PROFILE=default 
+  
+-- In the scripts below, you need to have some email accounts available and an SMTP server to which you can login (or which allows anonymous authentication). Hope this works. Let me know if there are problems. 
+  
+USE master 
+GO 
+sp_configure 'show advanced options',1 
+GO 
+RECONFIGURE WITH OVERRIDE 
+GO 
+sp_configure 'Database Mail XPs', 1 
+GO 
+RECONFIGURE  
+GO  
+
 -- Create new account
 EXECUTE msdb.dbo.sysmail_add_account_sp
 @account_name = 'SQLAlerts',
