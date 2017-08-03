@@ -84,7 +84,7 @@ Next use ktpass to generate a keytab file.
 ```PowerShell   
 setspn -A MSSQLSvc/**<fully qualified domain name of host machine>**:**<tcp port>** mssql
 ktpass /princ <hostname>$@<DOMAINREALM> /out mssql.keytab /mapuser DOMAINREALM\hostname$ /pass * /crypto All
-# Example: ktpass /princ meetrhel$@KUNALTESTAD.COM /out mssql.keytab /mapuser KUNALTESTAD\meetrhel$ /pass * /crypto All
+# Example: ktpass /princ computer1$@CONTOSO.COM /out mssql.keytab /mapuser CONTOSO\computer1$ /pass * /crypto All
 ```   
 Now move the keytab over to your SQL Server Linux machine using scp. Once copied move it to the following folder
 
