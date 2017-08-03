@@ -77,7 +77,7 @@ New-ADUser mssql -AccountPassword (Read-Host -AsSecureString "Enter Password") -
 >  [!NOTE]  
 >  It is a security best practice to have a dedicated AD account for SQL Server, so that SQL Server's credentials aren't shared with other services using the same account. However, you can reuse an existing AD account if you prefer, if you know the account's password (required to generate a keytab file in the next step).
 
-Now set the ServicePrincipalName (SPN) for this account using the `setspn.exe` tool. The SPN must be formatted exactly as specified in the following example: You can find the fully qualified domain name of the [!INCLUDE[ssNoVersion](../../docs/includes/ssnoversion-md.md)] host machine by running `hostname --all-fqdns` on the [!INCLUDE[ssNoVersion](../../docs/includes/ssnoversion-md.md)] host, and the TCP port should be 1433 unless you have configured [!INCLUDE[ssNoVersion](../../docs/includes/ssnoversion-md.md)] to use a different port number.  
+Now set the ServicePrincipalName (SPN) for this account using the `setspn.exe` tool. The SPN must be formatted exactly as specified in the following example: You can find the fully qualified domain name of the host machine by running `hostname --all-fqdns` on the host, and the TCP port should be 1433 unless you have configured to use a different port number.  
 ```PowerShell   
 setspn -A MSSQLSvc/**<fully qualified domain name of host machine>**:**<tcp port>** mssql
 ktpass /princ <hostname>$@<DOMAINREALM> /out mssql.keytab /mapuser DOMAINREALM\hostname$ /pass * /crypto All
@@ -109,19 +109,19 @@ quit
 >  [!NOTE]  
 >  The ktutil tool does not validate the password, so make sure you enter it correctly.
 
-Anyone with access to this `keytab` file can impersonate [!INCLUDE[ssNoVersion](../../docs/includes/ssnoversion-md.md)] on the domain, so make sure you restrict access to the file such that only the `mssql` account has read access:  
+Anyone with access to this `keytab` file can impersonate on the domain, so make sure you restrict access to the file such that only the `mssql` account has read access:  
 ```bash  
 sudo chown mssql:mssql /var/opt/mssql/secrets/mssql.keytab
 sudo chmod 400 /var/opt/mssql/secrets/mssql.keytab
 ```  
-Next, configure [!INCLUDE[ssNoVersion](../../docs/includes/ssnoversion-md.md)] to use this `keytab` file for Kerberos authentication:  
+Next, configure to use this `keytab` file for Kerberos authentication:  
 ```bash  
 sudo /opt/mssql/bin/mssql-conf set network.kerberoskeytabfile /var/opt/mssql/secrets/mssql.keytab
 sudo systemctl restart mssql-server
 ```  
 
 ## Step 4: Create AD-based logins in Transact-SQL  
-Connect to [!INCLUDE[ssNoVersion](../../docs/includes/ssnoversion-md.md)] and create a new, AD-based login:  
+Connect to and create a new, AD-based login:  
 ```Transact-SQL  
 CREATE LOGIN [CONTOSO\groupuser] FROM WINDOWS;
 #Assumption that you have a group called groupuser in your domain 
@@ -132,8 +132,8 @@ Verify that the login is now listed in the [sys.server_principals](/sql/relation
 SELECT name FROM sys.server_principals;
 ```  
 
-## Step 5: Connect to [!INCLUDE[ssNoVersion](../../docs/includes/ssnoversion-md.md)] using AD Authentication  
-Log in to a client machine using your domain credentials. Now you can connect to [!INCLUDE[ssNoVersion](../../docs/includes/ssnoversion-md.md)] without reentering your password, by using AD Authentication. If you create a login for an AD group, any AD user who is a member of that group can connect in the same way.  
+## Step 5: Connect to using AD Authentication  
+Log in to a client machine using your domain credentials. Now you can connect to without reentering your password, by using AD Authentication. If you create a login for an AD group, any AD user who is a member of that group can connect in the same way.  
 The specific connection string parameter for clients to use AD Authentication depends on which driver you are using. A few examples are below.  
 
 ## Examples  
