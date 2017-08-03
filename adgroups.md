@@ -61,7 +61,7 @@ Default principal: user@CONTOSO.COM
 For more information, see the Red Hat documentation for [Discovering and Joining Identity Domains](https://access.redhat.com/documentation/Red_Hat_Enterprise_Linux/7/html/Windows_Integration_Guide/realmd-domain.html). 
 
 
-## Step 2: Create AD user for and set SPN  
+## Step 2: Setup your domain controller 
 
 >  [!NOTE]  
 >  In the next steps we will use your [fully qualified domain name](https://en.wikipedia.org/wiki/Fully_qualified_domain_name). If you are on **Azure**, you will have to **[create one](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/portal-create-fqdn)** before you proceed. 
@@ -83,7 +83,9 @@ setspn -A MSSQLSvc/**<fully qualified domain name of host machine>**:**<tcp port
 ktpass /princ <hostname>$@<DOMAINREALM> /out mssql.keytab /mapuser DOMAINREALM\hostname$ /pass * /crypto All
 # Example: ktpass /princ meetrhel$@KUNALTESTAD.COM /out mssql.keytab /mapuser KUNALTESTAD\meetrhel$ /pass * /crypto All
 ```   
-Now move the keytab over to your SQL Server Linux machine using scp. Once copied move it to the '''/var/opt/mssql/secrets/''' folder
+Now move the keytab over to your SQL Server Linux machine using scp. Once copied move it to the following folder
+
+    /var/opt/mssql/secrets/
 
 ## Step 3: Create AD group and add your user to the group
 
