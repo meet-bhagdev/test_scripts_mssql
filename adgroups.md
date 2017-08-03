@@ -128,7 +128,7 @@ sudo /opt/mssql/bin/mssql-conf set network.kerberoskeytabfile /var/opt/mssql/sec
 sudo systemctl restart mssql-server
 ```  
 
-## Step 4: Create AD-based logins in Transact-SQL  
+## Step 5: Create AD-based logins in Transact-SQL  
 Connect to and create a new, AD-based login:  
 ```Transact-SQL  
 CREATE LOGIN [CONTOSO\groupuser] FROM WINDOWS;
@@ -140,7 +140,7 @@ Verify that the login is now listed in the [sys.server_principals](/sql/relation
 SELECT name FROM sys.server_principals;
 ```  
 
-## Step 5: Connect to using AD Authentication  
+## Step 6: Connect to using AD Authentication  
 Log in to a client machine using your domain credentials. Now you can connect to without reentering your password, by using AD Authentication. If you create a login for an AD group, any AD user who is a member of that group can connect in the same way.  
 The specific connection string parameter for clients to use AD Authentication depends on which driver you are using. A few examples are below.  
 
