@@ -78,6 +78,9 @@ New-ADUser mssql -AccountPassword (Read-Host -AsSecureString "Enter Password") -
 >  It is a security best practice to have a dedicated AD account for SQL Server, so that SQL Server's credentials aren't shared with other services using the same account. However, you can reuse an existing AD account if you prefer, if you know the account's password (required to generate a keytab file in the next step).
 
 Now set the ServicePrincipalName (SPN) for this account using the `setspn.exe` tool. The SPN must be formatted exactly as specified in the following example: You can find the fully qualified domain name of the host machine by running `hostname --all-fqdns` on the host, and the TCP port should be 1433 unless you have configured to use a different port number.  
+
+Next use ktpass to generate a keytab file.
+
 ```PowerShell   
 setspn -A MSSQLSvc/**<fully qualified domain name of host machine>**:**<tcp port>** mssql
 ktpass /princ <hostname>$@<DOMAINREALM> /out mssql.keytab /mapuser DOMAINREALM\hostname$ /pass * /crypto All
