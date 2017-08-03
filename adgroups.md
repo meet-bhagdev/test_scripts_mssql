@@ -98,8 +98,9 @@ Use the Active Directory UI for this
 
 First, check the Key Version Number (kvno) for the AD account created in the previous step. Usually it will be 2, but it could be another integer if you changed the account's password multiple times. On the SQL Server host machine, run the following:
 
-kinit user@CONTOSO.COM
-kvno MSSQLSvc/**<fully qualified domain name of host machine>**:**<tcp port>**@<REALMNAME>
+    kinit user@CONTOSO.COM
+
+    kvno MSSQLSvc/**<fully qualified domain name of host machine>**:**<tcp port>**@<REALMNAME>
 
 Now create a keytab file for the AD user you created in the previous step. To do so we will use **[ktutil](https://web.mit.edu/kerberos/krb5-1.12/doc/admin/admin_commands/ktutil.html)**. When prompted, enter the password for that AD account. 
 ```bash  
