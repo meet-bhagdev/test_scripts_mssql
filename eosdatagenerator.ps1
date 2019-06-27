@@ -79,7 +79,7 @@ Function Get-CPUInfo{
            
            $InfoRecord = New-Object -TypeName PSObject -Property @{
                     Name = $ServerName;
-                    Model = $OS_Info.Model;
+                    HostType = $OS_Info.Model;
                     Cores = $Cores;
                     Edition = $SQLEdition;
                     Version = $Version;
@@ -95,4 +95,4 @@ Function Get-CPUInfo{
 }
 
 #loop through the server list and get information about CPUs, Cores and Default instance edition
-Get-Content $SQLServerList | Foreach-Object {Get-CPUInfo $_ }|Format-Table -AutoSize Server, Model, Edition, TotalCores, Version, ProductLevel
+Get-Content $SQLServerList | Foreach-Object {Get-CPUInfo $_ }|Format-Table -AutoSize Name, HostType, Edition, TotalCores, Version, ProductLevel
