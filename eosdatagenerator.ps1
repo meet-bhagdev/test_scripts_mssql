@@ -1,3 +1,8 @@
+<#
+   To run this, put your SQL Server instance names in a text file and run the following command: .\eosdatagenerator.ps1 -SQLServerList "C:\PowerShell\ServerInstances.txt"
+#>
+
+
 param([string]$SQLServerList=$(Throw `
 "Paramater missing: -SQLServerList ConfigGroup"))
 
@@ -73,9 +78,9 @@ Function Get-CPUInfo{
           } 
            
            $InfoRecord = New-Object -TypeName PSObject -Property @{
-                    Server = $ServerName;
+                    Name = $ServerName;
                     Model = $OS_Info.Model;
-                    TotalCores = $Cores;
+                    Cores = $Cores;
                     Edition = $SQLEdition;
                     Version = $Version;
                     ProductLevel = $ProductLevel;
